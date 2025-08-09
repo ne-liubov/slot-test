@@ -68,34 +68,34 @@ window.addEventListener('DOMContentLoaded', () => {
   startPopup.setAttribute('data-open', 'false');
 
   const resourcesToLoad = [
-    './assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp',
-    './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
-    './assets/button1.png',
-    './assets/buttondis1.png',
-    './assets/dis1.png',
-    './assets/done1.png',
-    './assets/fisher21.png',
-    './assets/slots22.png',
-    './assets/table21.png',
-    './assets/table41.png',
-    './assets/table5.png',
-    './assets/d-1774049281-game-logo-900x9001.png',
-    './assets/fisher1.png',
-    './assets/load2.png',
-    './assets/cocos2.png',
-    './assets/symbols/5f100096-c2aa-450c-9646-066714d0fcde1.png',
-    './assets/symbols/6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
-    './assets/symbols/6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
-    './assets/symbols/60f98bb9-fe05-4812-ba6a-f742768f63881.png',
-    './assets/symbols/425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
-    './assets/symbols/a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
-    './assets/symbols/shoe5.png',
-    './assets/symbols/slot11.png',
-    './assets/symbols/slot21.png',
-    './assets/symbols/slot31.png',
-    './assets/symbols/slot41.png',
-    './assets/symbols/slot51.png',
-    './assets/symbols/slot61.png',
+    '/assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp',
+    '/assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
+    '/assets/button1.png',
+    '/assets/buttondis1.png',
+    '/assets/dis1.png',
+    '/assets/done1.png',
+    '/assets/fisher21.png',
+    '/assets/slots22.png',
+    '/assets/table21.png',
+    '/assets/table41.png',
+    '/assets/table5.png',
+    '/assets/d-1774049281-game-logo-900x9001.png',
+    '/assets/fisher1.png',
+    '/assets/load2.png',
+    '/assets/cocos2.png',
+    '/assets/symbols/5f100096-c2aa-450c-9646-066714d0fcde1.png',
+    '/assets/symbols/6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
+    '/assets/symbols/6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
+    '/assets/symbols/60f98bb9-fe05-4812-ba6a-f742768f63881.png',
+    '/assets/symbols/425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
+    '/assets/symbols/a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+    '/assets/symbols/shoe5.png',
+    '/assets/symbols/slot11.png',
+    '/assets/symbols/slot21.png',
+    '/assets/symbols/slot31.png',
+    '/assets/symbols/slot41.png',
+    '/assets/symbols/slot51.png',
+    '/assets/symbols/slot61.png',
   ];
 
   loadResources(
@@ -304,7 +304,7 @@ function createBox(sym) {
   const box = document.createElement('div');
   box.className = 'box';
   const img = document.createElement('img');
-  img.src = `./assets/symbols/${sym}`;
+  img.src = `/assets/symbols/${sym}`;
   img.alt = sym;
   img.draggable = false;
   box.appendChild(img);
