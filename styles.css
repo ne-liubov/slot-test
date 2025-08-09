@@ -42,7 +42,7 @@ p {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url('/assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp')
+  background: url('assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp')
     no-repeat center center/cover;
   display: flex;
   flex-direction: column;
