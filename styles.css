@@ -42,7 +42,7 @@ p {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url('./assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp')
+  background: url('../assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp')
     no-repeat center center/cover;
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@ p {
 
 #loader-logo {
   position: relative;
-  background: url('/assets/d-1774049281-game-logo-900x9001.png') no-repeat
+  background: url('../assets/d-1774049281-game-logo-900x9001.png') no-repeat
     center center/contain;
   width: 60%;
   height: 25%;
@@ -61,7 +61,7 @@ p {
 
 #loader-progress {
   position: relative;
-  background: url('/assets/fisher1.png') no-repeat center 0%;
+  background: url('../assets/fisher1.png') no-repeat center 0%;
   background-size: 120%;
   width: 100%;
   height: 100%;
@@ -105,7 +105,7 @@ p {
   width: 150px;
   height: 100px;
   left: 0;
-  background: url('/assets/d-1774049281-game-logo-900x9001.png') no-repeat left
+  background: url('../assets/d-1774049281-game-logo-900x9001.png') no-repeat left
     center / contain;
   z-index: 9;
   margin-top: 16px;
@@ -117,7 +117,7 @@ p {
   width: 270px;
   height: 230px;
   right: 0;
-  background: url('/assets/fisher21.png') no-repeat center top / contain;
+  background: url('../assets/fisher21.png') no-repeat center top / contain;
   background-size: 100%;
   z-index: 8;
 }
@@ -126,7 +126,7 @@ p {
   position: absolute;
   width: 100%;
   height: 390px;
-  background: url('/assets/slots22.png') no-repeat center;
+  background: url('../assets/slots22.png') no-repeat center;
   background-size: 120%;
   top: 165px;
   z-index: 9;
@@ -177,7 +177,7 @@ p {
   justify-content: center;
   width: 250px;
   height: 62px;
-  background: url('/assets/table41.png') no-repeat center;
+  background: url('../assets/table41.png') no-repeat center;
   background-size: 100%;
   z-index: 15;
 }
@@ -206,7 +206,7 @@ p {
   justify-content: center;
   width: 240px;
   height: 90px;
-  background: url('/assets/button1.png') no-repeat center;
+  background: url('../assets/button1.png') no-repeat center;
   background-size: 100%;
   z-index: 15;
   cursor: pointer;
@@ -265,7 +265,7 @@ p {
 }
 
 #spin-btn.disabled {
-  background: url('/assets/buttondis1.png') no-repeat center;
+  background: url('../assets/buttondis1.png') no-repeat center;
   background-size: 100%;
   cursor: not-allowed;
   animation: none !important;
@@ -293,7 +293,7 @@ p {
   z-index: 1000;
   width: 300px;
   height: 560px;
-  background: url('/assets/table5.png') no-repeat;
+  background: url('../assets/table5.png') no-repeat;
   background-size: 100%;
   top: 50%;
   left: 50%;
@@ -314,7 +314,7 @@ p {
   position: relative;
   width: 220px;
   height: 130px;
-  background: url('/assets/d-1774049281-game-logo-900x9001.png') no-repeat
+  background: url('../assets/d-1774049281-game-logo-900x9001.png') no-repeat
     center top / contain;
   margin-top: -45px;
   transform-origin: center bottom;
@@ -369,7 +369,7 @@ p {
   justify-content: center;
   width: 270px;
   height: 130px;
-  background: url('/assets/button1.png') no-repeat center;
+  background: url('../assets/button1.png') no-repeat center;
   background-size: 100%;
   z-index: 15;
   cursor: pointer;
@@ -410,7 +410,7 @@ p {
   z-index: 1000;
   width: 270px;
   height: 490px;
-  background: url('/assets/table5.png') no-repeat;
+  background: url('../assets/table5.png') no-repeat;
   background-size: 100%;
   top: 45%;
   left: 50%;
@@ -464,7 +464,7 @@ p {
   justify-content: center;
   width: 230px;
   height: 80px;
-  background: url('/assets/button1.png') no-repeat center;
+  background: url('../assets/button1.png') no-repeat center;
   background-size: 100%;
   z-index: 15;
   cursor: pointer;
@@ -499,7 +499,7 @@ p {
   justify-content: center;
   width: 145px;
   height: 105px;
-  background: url('/assets/table21.png') no-repeat center center/contain;
+  background: url('../assets/table21.png') no-repeat center center/contain;
   font-size: 12px;
   color: #fff;
   -webkit-text-stroke: 1px #2d063e;
