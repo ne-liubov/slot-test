@@ -41,7 +41,6 @@ const loadResources = (resourceUrls, onProgress, onComplete) => {
     if (loaded === total) {
       onComplete?.(results);
 
-      document.body.classList.add('background');
     }
   }
 };
