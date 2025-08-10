@@ -14,25 +14,82 @@ const counterEl = document.getElementById('counter');
 
 const prebuiltSymbols = {};
 
-const symbol = [
-  '5f100096-c2aa-450c-9646-066714d0fcde1.png',
-  '6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
-  '6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
-  '60f98bb9-fe05-4812-ba6a-f742768f63881.png',
-  '425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
-  'a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
-  '928faf1b-c486-4b23-ac06-1dbd15e838401.png',
-  '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png',
-  'shoe5.png',
-  'slot11.png',
-  'slot21.png',
-  'slot31.png',
-  'slot41.png',
-  'slot51.png',
-  'slot61.png',
+const spinQueue = [
+  [
+    ['slot51.png', 'slot11.png', '5259a129-bfa2-40d5-945f-f4b57772ebdf1.png'],
+    [
+      '6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
+      'a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+      'slot41.png',
+    ],
+    [
+      'slot41.png',
+      '425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
+      '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png',
+    ],
+  ],
+  [
+    [
+      'c6c20bba-677a-4b70-99e7-376f35fd4d311.png',
+      '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png',
+      'slot51.png',
+    ],
+    ['slot61.png', '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png', 'slot11.png'],
+    [
+      '6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
+      'a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+      '60f98bb9-fe05-4812-ba6a-f742768f63881.png',
+    ],
+  ],
+  [
+    ['slot31.png', 'slot21.png', '6bb95a70-78ae-4a62-b470-dfbd2642e7111.png'],
+    ['slot41.png', 'slot21.png', '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png'],
+    [
+      '6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
+      '928faf1b-c486-4b23-ac06-1dbd15e838401.png',
+      '425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
+    ],
+  ],
+  [
+    [
+      '928faf1b-c486-4b23-ac06-1dbd15e838401.png',
+      '5f100096-c2aa-450c-9646-066714d0fcde1.png',
+      'a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+    ],
+    [
+      '6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
+      '5f100096-c2aa-450c-9646-066714d0fcde1.png',
+      'slot21.png',
+    ],
+    [
+      '60f98bb9-fe05-4812-ba6a-f742768f63881.png',
+      '5f100096-c2aa-450c-9646-066714d0fcde1.png',
+      '5259a129-bfa2-40d5-945f-f4b57772ebdf1.png',
+    ],
+  ],
 ];
 
+const symbol = [...new Set(spinQueue.flat(2))];
 const luckySymbol = '5f100096-c2aa-450c-9646-066714d0fcde1.png';
+
+function stopReel(reelIndex) {
+  const currentCombo = spinQueue[0];
+
+  const boxes = reels[reelIndex].querySelectorAll('.box');
+  boxes.forEach((box, rowIndex) => {
+    const symbol = currentCombo[reelIndex][rowIndex];
+    box.dataset.symbol = symbol;
+    box.style.backgroundImage = `url('assets/${symbol}')`;
+  });
+
+  if (reelIndex === reels.length - 1) {
+    spinQueue.shift();
+
+    if (spinQueue.length === 0) {
+      highlightLuckySymbols();
+    }
+  }
+}
 
 let spinsLeft = 3;
 let spinning = false;
@@ -66,7 +123,7 @@ const moveCoconut = percent => {
   const barWidth = bar.offsetWidth;
   const coconutWidth = coconut.offsetWidth;
   const maxLeft = barWidth - coconutWidth;
-  const newLeft = (percent / 100) * maxLeft;
+  const newLeft = (percent / 100) * maxLeft + 70;
   coconut.style.left = `${newLeft}px`;
 };
 
@@ -118,14 +175,18 @@ async function preloadAllImages() {
 }
 
 function initStart() {
-  reels.forEach(reel => {
+  const initialSymbols = spinQueue[0];
+
+  reels.forEach((reel, index) => {
     const boxes = reel.querySelector('.boxes');
     boxes.innerHTML = '';
-    getRandomSymbols(3).forEach(sym => {
+
+    initialSymbols[index].forEach(sym => {
       const box = createBox(sym);
       box.dataset.symbol = sym;
       boxes.appendChild(box);
     });
+
     boxes.style.transition = 'none';
     boxes.style.transform = 'translateY(0)';
   });
@@ -140,8 +201,10 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(() => {
       loader.style.display = 'none';
       main.style.display = 'flex';
-      startPopup.setAttribute('data-open', 'true');
-      overlay.setAttribute('data-visible', 'true');
+      setTimeout(() => {
+        startPopup.setAttribute('data-open', 'true');
+        overlay.setAttribute('data-visible', 'true');
+      }, 2000);
       initStart();
       activateBtn.classList.add('animate');
     }, 1000);
@@ -173,32 +236,15 @@ async function spin() {
 
   const delayBetweenReels = 300;
   const spinPromises = [];
+  const spinIndex = 3 - (spinsLeft + 1);
+  const currentSpinResults = spinQueue[spinIndex + 1];
 
   for (let i = 0; i < reels.length; i++) {
     const reel = reels[i];
     const boxes = reel.querySelector('.boxes');
-
     const boxHeight = Math.round(reel.clientHeight / 3);
 
-    let final3;
-    if (isLastSpin) {
-      final3 = [
-        getRandomSymbol([luckySymbol]),
-        luckySymbol,
-        getRandomSymbol([luckySymbol]),
-      ];
-    } else {
-      do {
-        const center = getRandomSymbol();
-        const top = getRandomSymbol([center]);
-        const bottom = getRandomSymbol([center, top]);
-        final3 = [top, center, bottom];
-      } while (
-        final3[0] === final3[1] ||
-        final3[1] === final3[2] ||
-        final3[0] === final3[2]
-      );
-    }
+    const final3 = currentSpinResults[i];
 
     const prefill = getRandomSymbols(5, isLastSpin ? [luckySymbol] : []);
     const spinSequence = final3.concat(prefill);
@@ -248,7 +294,7 @@ async function spin() {
 
   if (isLastSpin) {
     highlightLuckySymbols();
-    setTimeout(showFinalPopup, 1500);
+    setTimeout(showFinalPopup, 3000);
   }
 
   spinning = false;
