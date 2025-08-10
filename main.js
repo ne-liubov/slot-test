@@ -313,8 +313,8 @@ function showFinalPopup() {
 
   finalPopup.setAttribute('data-open', 'true');
   overlay.setAttribute('data-visible', 'true');
-  document.getElementById('install-btn').classList.add('animate');
-  document.getElementById('spin-btn').classList.add('blocked');
+  installBtn.classList.add('animate');
+  spinBtn.classList.add('blocked');
 
   let timeLeft = 15 * 60;
 
@@ -332,7 +332,7 @@ function showFinalPopup() {
       clearInterval(timerId);
       finalPopup.setAttribute('data-open', 'false');
       overlay.setAttribute('data-visible', 'false');
-      document.getElementById('install-btn').classList.remove('animate');
+      installBtn.classList.remove('animate');
     }
   }, 1000);
 }
