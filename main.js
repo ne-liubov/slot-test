@@ -1,128 +1,128 @@
-const loader = document.getElementById('loader');
-const bar = document.getElementById('loader-bar');
-const coconut = document.getElementById('loader-coconut');
-const game = document.getElementById('game');
 const spinBtn = document.getElementById('spin-btn');
-const overlay = document.getElementById('overlay');
 
-const loadResources = (resourceUrls, onProgress, onComplete) => {
-  const total = resourceUrls.length;
-  let loaded = 0;
-  const results = [];
-
-  if (total === 0) {
-    onProgress?.(100);
-    onComplete?.([]);
-    return;
-  }
-
-  resourceUrls.forEach(url => {
-    const img = new Image();
-
-    img.onload = () => {
-      loaded++;
-      results.push({ url, status: 'loaded' });
-      updateProgress();
-    };
-
-    img.onerror = () => {
-      loaded++;
-      results.push({ url, status: 'error' });
-      updateProgress();
-    };
-
-    img.src = url;
-  });
-
-  function updateProgress() {
-    const percent = Math.round((loaded / total) * 100);
-    onProgress?.(percent);
-
-    if (loaded === total) {
-      onComplete?.(results);
-
-    }
-  }
-};
-
-const moveCoconut = percent => {
-  if (!bar || !coconut) return;
-
-  const barWidth = bar.offsetWidth;
-  const coconutWidth = coconut.offsetWidth;
-
-  const maxLeft = barWidth - coconutWidth;
-  const newLeft = (percent / 100) * maxLeft + 70;
-
-  coconut.style.left = `${newLeft}px`;
-};
-
-window.addEventListener('DOMContentLoaded', () => {
+window.onload = function () {
+  const loader = document.getElementById('loader');
+  const loaderLogo = document.getElementById('loader-logo');
+  const loaderProgress = document.getElementById('loader-progress');
+  const bar = document.getElementById('loader-bar');
+  const coconut = document.getElementById('loader-coconut');
+  const overlay = document.getElementById('overlay');
   const startPopup = document.querySelector('[data-start-popup]');
   const activateBtn = document.getElementById('activate-btn');
+  const main = document.querySelector('main');
 
-  spinBtn.classList.add('blocked');
+  function getBackgroundImageUrl(elem) {
+    const style = getComputedStyle(elem);
+    const match = style.backgroundImage.match(/url\(["']?(.+?)["']?\)/);
+    return match ? match[1] : null;
+  }
 
-  game.style.display = 'none';
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      if (!src) return resolve();
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = () => reject(new Error(`${src}`));
+      img.src = src;
+    });
+  }
 
-  overlay.setAttribute('data-visible', 'false');
-  startPopup.setAttribute('data-open', 'false');
+  async function preloadImagesWithProgress(srcList, onProgress) {
+    let loaded = 0;
+    const total = srcList.length;
 
-  const resourcesToLoad = [
-    './assets/8d64b78d2eba2edd9ec91adc6fcd716b53297316.webp',
-    './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
-    './assets/button1.png',
-    './assets/buttondis1.png',
-    './assets/dis1.png',
-    './assets/done1.png',
-    './assets/fisher21.png',
-    './assets/slots22.png',
-    './assets/table21.png',
-    './assets/table41.png',
-    './assets/table5.png',
-    './assets/d-1774049281-game-logo-900x9001.png',
-    './assets/fisher1.png',
-    './assets/load2.png',
-    './assets/cocos2.png',
-    './assets/symbols/5f100096-c2aa-450c-9646-066714d0fcde1.png',
-    './assets/symbols/6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
-    './assets/symbols/6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
-    './assets/symbols/60f98bb9-fe05-4812-ba6a-f742768f63881.png',
-    './assets/symbols/425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
-    './assets/symbols/a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
-    './assets/symbols/shoe5.png',
-    './assets/symbols/slot11.png',
-    './assets/symbols/slot21.png',
-    './assets/symbols/slot31.png',
-    './assets/symbols/slot41.png',
-    './assets/symbols/slot51.png',
-    './assets/symbols/slot61.png',
-  ];
+    await Promise.all(
+      srcList.map(src =>
+        loadImage(src)
+          .then(() => {
+            loaded++;
+            onProgress?.(Math.round((loaded / total) * 100));
+          })
+          .catch(() => {})
+      )
+    );
+  }
 
-  loadResources(
-    resourcesToLoad,
-    percent => {
-      moveCoconut(percent);
-    },
-    () => {
-      setTimeout(() => {
-        loader.style.display = 'none';
-        game.style.display = 'flex';
+  const moveCoconut = percent => {
+    if (!bar || !coconut) return;
+    const barWidth = bar.offsetWidth;
+    const coconutWidth = coconut.offsetWidth;
+    const maxLeft = barWidth - coconutWidth;
+    const newLeft = (percent / 100) * maxLeft;
+    coconut.style.left = `${newLeft}px`;
+  };
 
-        setTimeout(() => {
-          startPopup.setAttribute('data-open', 'true');
-          overlay.setAttribute('data-visible', 'true');
-        }, 1000);
-      }, 500);
-    }
-  );
-
-  activateBtn.addEventListener('click', () => {
-    startPopup.setAttribute('data-open', 'false');
+  async function startPreloading() {
+    spinBtn.classList.add('blocked');
+    main.style.display = 'none';
     overlay.setAttribute('data-visible', 'false');
-    spinBtn.classList.remove('blocked');
-  });
-});
+    startPopup.setAttribute('data-open', 'false');
+
+    const bgLoader = getBackgroundImageUrl(loader);
+    const bgLogo = getBackgroundImageUrl(loaderLogo);
+    const bgProgress = getBackgroundImageUrl(loaderProgress);
+
+    const loaderImages = [
+      bgLoader,
+      bgLogo,
+      bgProgress,
+      bar.src,
+      coconut.src,
+    ].filter(Boolean);
+
+    // await preloadImagesWithProgress(loaderImages, percent => {
+    //   moveCoconut(percent);
+    // });
+
+    const resourcesToLoad = [
+      './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
+      './assets/button1.png',
+      './assets/buttondis1.png',
+      './assets/dis1.png',
+      './assets/done1.png',
+      './assets/fisher21.png',
+      './assets/slots22.png',
+      './assets/table21.png',
+      './assets/table41.png',
+      './assets/table5.png',
+      './assets/d-1774049281-game-logo-900x9001.png',
+      './assets/fisher1.png',
+      './assets/symbols/5f100096-c2aa-450c-9646-066714d0fcde1.png',
+      './assets/symbols/6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
+      './assets/symbols/6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
+      './assets/symbols/60f98bb9-fe05-4812-ba6a-f742768f63881.png',
+      './assets/symbols/425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
+      './assets/symbols/a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+      './assets/symbols/shoe5.png',
+      './assets/symbols/slot11.png',
+      './assets/symbols/slot21.png',
+      './assets/symbols/slot31.png',
+      './assets/symbols/slot41.png',
+      './assets/symbols/slot51.png',
+      './assets/symbols/slot61.png',
+    ];
+
+    await preloadImagesWithProgress(resourcesToLoad, percent => {
+      moveCoconut(percent);
+    });
+
+    setTimeout(() => {
+      loader.style.display = 'none';
+      main.style.display = 'flex';
+
+      startPopup.setAttribute('data-open', 'true');
+      overlay.setAttribute('data-visible', 'true');
+    }, 1000);
+
+    activateBtn.addEventListener('click', () => {
+      startPopup.setAttribute('data-open', 'false');
+      overlay.setAttribute('data-visible', 'false');
+      spinBtn.classList.remove('blocked');
+    });
+  }
+
+  startPreloading();
+};
 
 const symbol = [
   '5f100096-c2aa-450c-9646-066714d0fcde1.png',
@@ -258,7 +258,7 @@ async function spin() {
 
   if (isLastSpin) {
     highlightLuckySymbols();
-    setTimeout(showFinalPopup, 3000);
+    setTimeout(showFinalPopup, 1500);
   }
 
   spinning = false;
