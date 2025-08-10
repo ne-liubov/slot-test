@@ -26,6 +26,11 @@ body {
   justify-content: center;
 }
 
+body.background {
+  background: url('./assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png')
+    no-repeat center center / cover;
+}
+
 main {
   display: flex;
   align-items: center;
@@ -665,7 +670,7 @@ p {
     transform: scale(1.8);
   }
 
-  [data-final-popup][data-open='true'] {
+  [data-final-popup] {
     top: auto;
     left: auto;
     transform: scale(1.8);

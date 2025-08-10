@@ -39,6 +39,8 @@ const loadResources = (resourceUrls, onProgress, onComplete) => {
 
     if (loaded === total) {
       onComplete?.(results);
+
+      document.body.classList.add('background');
     }
   }
 };
@@ -257,7 +259,7 @@ async function spin() {
 
   if (isLastSpin) {
     highlightLuckySymbols();
-    setTimeout(showFinalPopup, 1500);
+    setTimeout(showFinalPopup, 3000);
   }
 
   spinning = false;
