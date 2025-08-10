@@ -288,6 +288,13 @@ p {
   animation: pulseCenter 1s infinite ease-in-out;
 }
 
+#activate-btn.no-animation,
+#activate-btn.no-animation::before,
+#install-btn.no-animation,
+#install-btn.no-animation::before {
+  animation: none !important;
+}
+
 #spin-btn.blocked {
   cursor: not-allowed;
   pointer-events: none;
@@ -408,7 +415,6 @@ p {
   padding: 0;
   margin-bottom: -15px;
   overflow: hidden;
-  animation: none !important;
 }
 
 #activate-btn::after {
@@ -429,7 +435,6 @@ p {
   background: radial-gradient(circle, #360443 0%, transparent 50%);
   transform: scale(0.8);
   pointer-events: none;
-  animation: none !important;
 }
 
 [data-final-popup][data-open='true'] {
@@ -507,7 +512,6 @@ p {
   font-size: 28px;
   line-height: 0.98667;
   overflow: hidden;
-  animation: none !important;
 }
 
 #install-btn::before {
@@ -520,7 +524,6 @@ p {
   background: radial-gradient(circle, #360443 0%, transparent 70%);
   transform: scale(0.8);
   pointer-events: none;
-  animation: none !important;
 }
 
 #timer {
