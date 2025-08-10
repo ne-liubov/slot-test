@@ -288,10 +288,10 @@ p {
   animation: pulseCenter 1s infinite ease-in-out;
 }
 
-#activate-btn,
-#activate-btn::before,
-#install-btn,
-#install-btn::before {
+#activate-btn.no-animation,
+#activate-btn.no-animation::before,
+#install-btn.no-animation,
+#install-btn.no-animation::before {
   animation: none !important;
 }
 
