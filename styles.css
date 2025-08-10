@@ -514,7 +514,7 @@ p {
   overflow: hidden;
 }
 
-#install-btn #install-btn::before {
+#install-btn::before {
   content: '';
   position: absolute;
   top: auto;

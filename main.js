@@ -134,6 +134,7 @@ function initStart() {
 document.addEventListener('DOMContentLoaded', function () {
   loader.style.display = 'flex';
   main.style.display = 'none';
+  document.getElementById('spin-btn').classList.add('blocked');
 
   preloadAllImages().then(() => {
     setTimeout(() => {
@@ -142,14 +143,14 @@ document.addEventListener('DOMContentLoaded', function () {
       startPopup.setAttribute('data-open', 'true');
       overlay.setAttribute('data-visible', 'true');
       initStart();
-      document.getElementById('activate-btn').classList.add('animate');
+      activateBtn.classList.add('animate');
     }, 1000);
 
     activateBtn.addEventListener('click', () => {
       startPopup.setAttribute('data-open', 'false');
       overlay.setAttribute('data-visible', 'false');
       spinBtn.classList.remove('blocked');
-      document.getElementById('activate-btn').classList.remove('animate');
+      activateBtn.classList.remove('animate');
     });
   });
 });
@@ -313,6 +314,7 @@ function showFinalPopup() {
   finalPopup.setAttribute('data-open', 'true');
   overlay.setAttribute('data-visible', 'true');
   document.getElementById('install-btn').classList.add('animate');
+  document.getElementById('spin-btn').classList.add('blocked');
 
   let timeLeft = 15 * 60;
 
@@ -334,4 +336,3 @@ function showFinalPopup() {
     }
   }, 1000);
 }
-
