@@ -3,6 +3,7 @@ const bar = document.getElementById('loader-bar');
 const coconut = document.getElementById('loader-coconut');
 const game = document.getElementById('game');
 const spinBtn = document.getElementById('spin-btn');
+const overlay = document.getElementById('overlay');
 
 const loadResources = (resourceUrls, onProgress, onComplete) => {
   const total = resourceUrls.length;
@@ -59,7 +60,6 @@ const moveCoconut = percent => {
 
 window.addEventListener('DOMContentLoaded', () => {
   const startPopup = document.querySelector('[data-start-popup]');
-  const overlay = document.getElementById('overlay');
   const activateBtn = document.getElementById('activate-btn');
 
   spinBtn.classList.add('blocked');
