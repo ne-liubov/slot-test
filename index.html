@@ -27,19 +27,18 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div id="loader" class="container" aria-label="Game loading">
+      <div id="loader-logo" aria-hidden="true"></div>
+      <div id="loader-progress">
+        <img id="loader-bar" src="./assets/load2.png" alt="Loading bar" />
+        <img
+          id="loader-coconut"
+          src="./assets/cocos2.png"
+          alt="Coconut indicator"
+        />
+      </div>
+    </div>
     <main>
-      <section id="loader" class="container" aria-label="Game loading">
-        <div id="loader-logo" aria-hidden="true"></div>
-        <div id="loader-progress">
-          <img id="loader-bar" src="./assets/load2.png" alt="Loading bar" />
-          <img
-            id="loader-coconut"
-            src="./assets/cocos2.png"
-            alt="Coconut indicator"
-          />
-        </div>
-      </section>
-
       <section id="game" class="container" aria-label="Slot game">
         <header class="game-header">
           <div id="game-logo" aria-label="Game logo"></div>
@@ -72,69 +71,69 @@
             aria-label="Spin the slot"
           ></button>
         </footer>
-
-        <div
-          id="start-popup"
-          data-start-popup
-          data-open="false"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          <div id="popup-logo" aria-hidden="true"></div>
-          <p class="first-pop-text second-font">WOW!</p>
-          <p class="second-pop-text second-font">YOU RECEIVED:</p>
-          <p class="big-pop-text second-font">3 FREE SPINS</p>
-
-          <div class="close-popup second-font">
-            <img src="./assets/dis1.png" alt="" width="80" height="80" />
-            <p>Without<br />registration</p>
-          </div>
-          <button id="activate-btn" type="button" class="third-font"></button>
-        </div>
-        <div id="overlay" data-overlay data-visible="false"></div>
-
-        <div
-          id="final-popup"
-          data-final-popup
-          data-open="false"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="final-title"
-        >
-          <div id="popup-logo" aria-hidden="true"></div>
-
-          <p class="final-pop-text-done second-font">WELL DONE!</p>
-          <p class="final-pop-text-won second-font">YOU WON:</p>
-          <p class="final-pop-text-gold second-font">450 GBP</p>
-          <p class="final-pop-text-free second-font">+ 250 FREE SPINS</p>
-
-          <div class="done-popup second-font">
-            <img src="./assets/done1.png" alt="" width="80" height="80" />
-            <p>
-              Turn on<br />notifications<br />and receive<br />more special<br />bonuses!
-            </p>
-          </div>
-
-          <div class="final-install-btn third-font">
-            <a
-              id="install-btn"
-              href="{offer}"
-              target="_blank"
-              rel="noopener noreferrer"
-              >INSTALL<br />THE APP</a
-            >
-          </div>
-
-          <div id="timer" class="first-font">
-            <p>
-              Bonus will expire in:<br /><span id="countdown">15:00</span
-              ><br />MINUTES SECONDS
-            </p>
-          </div>
-        </div>
       </section>
     </main>
+    <div
+      id="start-popup"
+      data-start-popup
+      data-open="false"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div id="popup-logo" aria-hidden="true"></div>
+      <p class="first-pop-text second-font">WOW!</p>
+      <p class="second-pop-text second-font">YOU RECEIVED:</p>
+      <p class="big-pop-text second-font">3 FREE SPINS</p>
+
+      <div class="close-popup second-font">
+        <img src="./assets/dis1.png" alt="" width="80" height="80" />
+        <p>Without<br />registration</p>
+      </div>
+      <button id="activate-btn" type="button" class="third-font"></button>
+    </div>
+    <div id="overlay" data-overlay data-visible="false"></div>
+
+    <div
+      id="final-popup"
+      data-final-popup
+      data-open="false"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="final-title"
+    >
+      <div id="popup-logo" aria-hidden="true"></div>
+
+      <p class="final-pop-text-done second-font">WELL DONE!</p>
+      <p class="final-pop-text-won second-font">YOU WON:</p>
+      <p class="final-pop-text-gold second-font">450 GBP</p>
+      <p class="final-pop-text-free second-font">+ 250 FREE SPINS</p>
+
+      <div class="done-popup second-font">
+        <img src="./assets/done1.png" alt="" width="80" height="80" />
+        <p>
+          Turn on<br />notifications<br />and receive<br />more special<br />bonuses!
+        </p>
+      </div>
+
+      <div class="final-install-btn third-font">
+        <a
+          id="install-btn"
+          href="{offer}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >INSTALL<br />THE APP</a
+        >
+      </div>
+
+      <div id="timer" class="first-font">
+        <p>
+          Bonus will expire in:<br /><span id="countdown">15:00</span
+          ><br />MINUTES SECONDS
+        </p>
+      </div>
+    </div>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>
