@@ -4,6 +4,7 @@ const main = document.querySelector('main');
 const overlay = document.getElementById('overlay');
 const startPopup = document.querySelector('[data-start-popup]');
 const activateBtn = document.getElementById('activate-btn');
+const installBtn = document.getElementById('install-btn');
 const loaderLogo = document.getElementById('loader-logo');
 const loaderProgress = document.getElementById('loader-progress');
 const bar = document.getElementById('loader-bar');
@@ -141,12 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
       startPopup.setAttribute('data-open', 'true');
       overlay.setAttribute('data-visible', 'true');
       initStart();
+      document.getElementById('activate-btn').classList.add('animate');
     }, 1000);
 
     activateBtn.addEventListener('click', () => {
       startPopup.setAttribute('data-open', 'false');
       overlay.setAttribute('data-visible', 'false');
       spinBtn.classList.remove('blocked');
+      document.getElementById('activate-btn').classList.remove('animate');
     });
   });
 });
@@ -309,6 +312,7 @@ function showFinalPopup() {
 
   finalPopup.setAttribute('data-open', 'true');
   overlay.setAttribute('data-visible', 'true');
+  document.getElementById('install-btn').classList.add('animate');
 
   let timeLeft = 15 * 60;
 
@@ -326,6 +330,8 @@ function showFinalPopup() {
       clearInterval(timerId);
       finalPopup.setAttribute('data-open', 'false');
       overlay.setAttribute('data-visible', 'false');
+      document.getElementById('install-btn').classList.remove('animate');
     }
   }, 1000);
 }
+
