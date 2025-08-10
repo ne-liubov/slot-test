@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(() => {
         startPopup.setAttribute('data-open', 'true');
         overlay.setAttribute('data-visible', 'true');
-      }, 2000);
+      }, 1000);
       initStart();
       activateBtn.classList.add('animate');
     }, 1000);
