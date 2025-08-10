@@ -1,128 +1,17 @@
 const spinBtn = document.getElementById('spin-btn');
+const loader = document.getElementById('loader');
+const main = document.querySelector('main');
+const overlay = document.getElementById('overlay');
+const startPopup = document.querySelector('[data-start-popup]');
+const activateBtn = document.getElementById('activate-btn');
+const loaderLogo = document.getElementById('loader-logo');
+const loaderProgress = document.getElementById('loader-progress');
+const bar = document.getElementById('loader-bar');
+const coconut = document.getElementById('loader-coconut');
+const reels = document.querySelectorAll('.reel');
+const counterEl = document.getElementById('counter');
 
-window.onload = function () {
-  const loader = document.getElementById('loader');
-  const loaderLogo = document.getElementById('loader-logo');
-  const loaderProgress = document.getElementById('loader-progress');
-  const bar = document.getElementById('loader-bar');
-  const coconut = document.getElementById('loader-coconut');
-  const overlay = document.getElementById('overlay');
-  const startPopup = document.querySelector('[data-start-popup]');
-  const activateBtn = document.getElementById('activate-btn');
-  const main = document.querySelector('main');
-
-  function getBackgroundImageUrl(elem) {
-    const style = getComputedStyle(elem);
-    const match = style.backgroundImage.match(/url\(["']?(.+?)["']?\)/);
-    return match ? match[1] : null;
-  }
-
-  function loadImage(src) {
-    return new Promise((resolve, reject) => {
-      if (!src) return resolve();
-      const img = new Image();
-      img.onload = () => resolve(src);
-      img.onerror = () => reject(new Error(`${src}`));
-      img.src = src;
-    });
-  }
-
-  async function preloadImagesWithProgress(srcList, onProgress) {
-    let loaded = 0;
-    const total = srcList.length;
-
-    await Promise.all(
-      srcList.map(src =>
-        loadImage(src)
-          .then(() => {
-            loaded++;
-            onProgress?.(Math.round((loaded / total) * 100));
-          })
-          .catch(() => {})
-      )
-    );
-  }
-
-  const moveCoconut = percent => {
-    if (!bar || !coconut) return;
-    const barWidth = bar.offsetWidth;
-    const coconutWidth = coconut.offsetWidth;
-    const maxLeft = barWidth - coconutWidth;
-    const newLeft = (percent / 100) * maxLeft;
-    coconut.style.left = `${newLeft}px`;
-  };
-
-  async function startPreloading() {
-    spinBtn.classList.add('blocked');
-    main.style.display = 'none';
-    overlay.setAttribute('data-visible', 'false');
-    startPopup.setAttribute('data-open', 'false');
-
-    const bgLoader = getBackgroundImageUrl(loader);
-    const bgLogo = getBackgroundImageUrl(loaderLogo);
-    const bgProgress = getBackgroundImageUrl(loaderProgress);
-
-    const loaderImages = [
-      bgLoader,
-      bgLogo,
-      bgProgress,
-      bar.src,
-      coconut.src,
-    ].filter(Boolean);
-
-    // await preloadImagesWithProgress(loaderImages, percent => {
-    //   moveCoconut(percent);
-    // });
-
-    const resourcesToLoad = [
-      './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
-      './assets/button1.png',
-      './assets/buttondis1.png',
-      './assets/dis1.png',
-      './assets/done1.png',
-      './assets/fisher21.png',
-      './assets/slots22.png',
-      './assets/table21.png',
-      './assets/table41.png',
-      './assets/table5.png',
-      './assets/d-1774049281-game-logo-900x9001.png',
-      './assets/fisher1.png',
-      './assets/symbols/5f100096-c2aa-450c-9646-066714d0fcde1.png',
-      './assets/symbols/6a6ac619-4362-4a83-8f0a-ead4c7bb17d11.png',
-      './assets/symbols/6bb95a70-78ae-4a62-b470-dfbd2642e7111.png',
-      './assets/symbols/60f98bb9-fe05-4812-ba6a-f742768f63881.png',
-      './assets/symbols/425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
-      './assets/symbols/a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
-      './assets/symbols/shoe5.png',
-      './assets/symbols/slot11.png',
-      './assets/symbols/slot21.png',
-      './assets/symbols/slot31.png',
-      './assets/symbols/slot41.png',
-      './assets/symbols/slot51.png',
-      './assets/symbols/slot61.png',
-    ];
-
-    await preloadImagesWithProgress(resourcesToLoad, percent => {
-      moveCoconut(percent);
-    });
-
-    setTimeout(() => {
-      loader.style.display = 'none';
-      main.style.display = 'flex';
-
-      startPopup.setAttribute('data-open', 'true');
-      overlay.setAttribute('data-visible', 'true');
-    }, 1000);
-
-    activateBtn.addEventListener('click', () => {
-      startPopup.setAttribute('data-open', 'false');
-      overlay.setAttribute('data-visible', 'false');
-      spinBtn.classList.remove('blocked');
-    });
-  }
-
-  startPreloading();
-};
+const prebuiltSymbols = {};
 
 const symbol = [
   '5f100096-c2aa-450c-9646-066714d0fcde1.png',
@@ -131,6 +20,8 @@ const symbol = [
   '60f98bb9-fe05-4812-ba6a-f742768f63881.png',
   '425682eb-0f72-4976-8eb5-494d2b2d9a321.png',
   'a9e0dac9-564d-4c7a-ada3-e4480f9ca5051.png',
+  '928faf1b-c486-4b23-ac06-1dbd15e838401.png',
+  '791b8ed4-cc65-40c6-969c-0dc3f803bbfb1.png',
   'shoe5.png',
   'slot11.png',
   'slot21.png',
@@ -141,15 +32,89 @@ const symbol = [
 ];
 
 const luckySymbol = '5f100096-c2aa-450c-9646-066714d0fcde1.png';
-const reels = document.querySelectorAll('.reel');
-const counterEl = document.getElementById('counter');
 
 let spinsLeft = 3;
 let spinning = false;
 
 spinBtn.addEventListener('click', spin);
 
-initStart();
+function getBackgroundImageUrl(elem) {
+  if (!elem) return null;
+  const style = getComputedStyle(elem);
+  const match = style.backgroundImage.match(/url\(['"]?(.+?)['"]?\)/);
+  return match ? match[1] : null;
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    if (!src) {
+      resolve();
+      return;
+    }
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => {
+      resolve();
+    };
+    img.src = src;
+  });
+}
+
+const moveCoconut = percent => {
+  if (!bar || !coconut) return;
+  const barWidth = bar.offsetWidth;
+  const coconutWidth = coconut.offsetWidth;
+  const maxLeft = barWidth - coconutWidth;
+  const newLeft = (percent / 100) * maxLeft;
+  coconut.style.left = `${newLeft}px`;
+};
+
+async function preloadAllImages() {
+  const cssBackgrounds = [
+    getBackgroundImageUrl(loader),
+    getBackgroundImageUrl(loaderLogo),
+    getBackgroundImageUrl(loaderProgress),
+  ].filter(Boolean);
+
+  const htmlImages = [bar.src, coconut.src].filter(
+    src => (src && src.startsWith('http')) || src.startsWith('./')
+  );
+
+  const allResources = [
+    ...cssBackgrounds,
+    ...htmlImages,
+    './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
+    './assets/button1.png',
+    './assets/buttondis1.png',
+    './assets/dis1.png',
+    './assets/done1.png',
+    './assets/fisher21.png',
+    './assets/slots22.png',
+    './assets/table21.png',
+    './assets/table41.png',
+    './assets/table5.png',
+    './assets/d-1774049281-game-logo-900x9001.png',
+    ...symbol.map(s => `./assets/symbols/${s}`),
+  ].filter(Boolean);
+
+  let loadedCount = 0;
+  const totalCount = allResources.length;
+
+  const loadingPromises = allResources.map(src =>
+    loadImage(src).then(() => {
+      loadedCount++;
+      const percent = Math.round((loadedCount / totalCount) * 100);
+      moveCoconut(percent);
+    })
+  );
+
+  await Promise.all(loadingPromises);
+
+  symbol.forEach(sym => {
+    const box = createBox(sym);
+    prebuiltSymbols[sym] = box;
+  });
+}
 
 function initStart() {
   reels.forEach(reel => {
@@ -164,6 +129,27 @@ function initStart() {
     boxes.style.transform = 'translateY(0)';
   });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  loader.style.display = 'flex';
+  main.style.display = 'none';
+
+  preloadAllImages().then(() => {
+    setTimeout(() => {
+      loader.style.display = 'none';
+      main.style.display = 'flex';
+      startPopup.setAttribute('data-open', 'true');
+      overlay.setAttribute('data-visible', 'true');
+      initStart();
+    }, 1000);
+
+    activateBtn.addEventListener('click', () => {
+      startPopup.setAttribute('data-open', 'false');
+      overlay.setAttribute('data-visible', 'false');
+      spinBtn.classList.remove('blocked');
+    });
+  });
+});
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -264,6 +250,22 @@ async function spin() {
   spinning = false;
 }
 
+function createBox(sym) {
+  if (prebuiltSymbols[sym]) {
+    return prebuiltSymbols[sym].cloneNode(true);
+  }
+
+  const box = document.createElement('div');
+  box.className = 'box';
+  const img = document.createElement('img');
+  img.src = `./assets/symbols/${sym}`;
+  img.alt = sym;
+  img.draggable = false;
+  box.appendChild(img);
+  box.dataset.symbol = sym;
+  return box;
+}
+
 function highlightLuckySymbols() {
   reels.forEach(reel => {
     const boxes = reel.querySelectorAll('.box');
@@ -299,18 +301,6 @@ function getNonWinningCombo() {
     combo.push(s);
   }
   return combo;
-}
-
-function createBox(sym) {
-  const box = document.createElement('div');
-  box.className = 'box';
-  const img = document.createElement('img');
-  img.src = `./assets/symbols/${sym}`;
-  img.alt = sym;
-  img.draggable = false;
-  box.appendChild(img);
-  box.dataset.symbol = sym;
-  return box;
 }
 
 function showFinalPopup() {
