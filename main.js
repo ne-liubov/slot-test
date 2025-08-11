@@ -74,164 +74,10 @@ const spinQueue = [
 const symbol = [...new Set(spinQueue.flat(2))];
 const luckySymbol = '5f100096-c2aa-450c-9646-066714d0fcde1.png';
 
-function stopReel(reelIndex) {
-  const currentCombo = spinQueue[0];
-
-  const boxes = reels[reelIndex].querySelectorAll('.box');
-  boxes.forEach((box, rowIndex) => {
-    const symbol = currentCombo[reelIndex][rowIndex];
-    box.dataset.symbol = symbol;
-    box.style.backgroundImage = `url('assets/${symbol}')`;
-  });
-
-  if (reelIndex === reels.length - 1) {
-    spinQueue.shift();
-
-    if (spinQueue.length === 0) {
-      highlightLuckySymbols();
-    }
-  }
-}
-
 let spinsLeft = 3;
 let spinning = false;
 
 spinBtn.addEventListener('click', spin);
-
-function getBackgroundImageUrl(elem) {
-  if (!elem) return null;
-  const style = getComputedStyle(elem);
-  const match = style.backgroundImage.match(/url\(['"]?(.+?)['"]?\)/);
-  return match ? match[1] : null;
-}
-
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    if (!src) {
-      resolve();
-      return;
-    }
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = () => {
-      resolve();
-    };
-    img.src = src;
-  });
-}
-
-const moveCoconut = percent => {
-  if (!bar || !coconut) return;
-  const barWidth = bar.offsetWidth;
-  const coconutWidth = coconut.offsetWidth;
-  const maxLeft = barWidth - coconutWidth;
-  const newLeft = (percent / 100) * maxLeft + 70;
-  coconut.style.left = `${newLeft}px`;
-};
-
-async function preloadAllImages() {
-  const cssBackgrounds = [
-    getBackgroundImageUrl(loader),
-    getBackgroundImageUrl(loaderLogo),
-    getBackgroundImageUrl(loaderProgress),
-  ].filter(Boolean);
-
-  const htmlImages = [bar.src, coconut.src].filter(
-    src => (src && src.startsWith('http')) || src.startsWith('./')
-  );
-
-  const allResources = [
-    ...cssBackgrounds,
-    ...htmlImages,
-    './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
-    './assets/button1.png',
-    './assets/buttondis1.png',
-    './assets/dis1.png',
-    './assets/done1.png',
-    './assets/fisher21.png',
-    './assets/slots22.png',
-    './assets/table21.png',
-    './assets/table41.png',
-    './assets/table5.png',
-    './assets/d-1774049281-game-logo-900x9001.png',
-    ...symbol.map(s => `./assets/symbols/${s}`),
-  ].filter(Boolean);
-
-  let loadedCount = 0;
-  const totalCount = allResources.length;
-
-  const loadingPromises = allResources.map(src =>
-    loadImage(src).then(() => {
-      loadedCount++;
-      const percent = Math.round((loadedCount / totalCount) * 100);
-      moveCoconut(percent);
-    })
-  );
-
-  await Promise.all(loadingPromises);
-
-  symbol.forEach(sym => {
-    const box = createBox(sym);
-    prebuiltSymbols[sym] = box;
-  });
-}
-
-function initStart() {
-  const initialSymbols = spinQueue[0];
-
-  reels.forEach((reel, index) => {
-    const boxes = reel.querySelector('.boxes');
-    boxes.innerHTML = '';
-
-    initialSymbols[index].forEach(sym => {
-      const box = createBox(sym);
-      box.dataset.symbol = sym;
-      boxes.appendChild(box);
-    });
-
-    boxes.style.transition = 'none';
-    boxes.style.transform = 'translateY(0)';
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  loader.style.display = 'flex';
-  main.style.display = 'none';
-  document.getElementById('spin-btn').classList.add('blocked');
-
-  preloadAllImages().then(() => {
-    setTimeout(() => {
-      loader.classList.add('hidden');
-      main.style.display = 'flex';
-      main.classList.add('hidden');
-      setTimeout(() => {
-        loader.style.display = 'none';
-        main.classList.remove('hidden');
-      }, 50);
-      setTimeout(() => {
-        startPopup.style.display = 'flex';
-        startPopup.setAttribute('data-open', 'true');
-        overlay.setAttribute('data-visible', 'true');
-      }, 1000);
-      initStart();
-      activateBtn.classList.add('animate');
-    }, 1000);
-
-    activateBtn.addEventListener('click', () => {
-      startPopup.setAttribute('data-open', 'false');
-      setTimeout(() => {
-        startPopup.style.display = 'none';
-      }, 300);
-      overlay.setAttribute('data-visible', 'false');
-      spinBtn.classList.remove('blocked');
-      activateBtn.classList.remove('animate');
-    });
-  });
-});
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 async function spin() {
   spinBtn.classList.add('disabled');
@@ -310,6 +156,138 @@ async function spin() {
     spinBtn.classList.remove('disabled');
   }
 }
+
+function getBackgroundImageUrl(elem) {
+  if (!elem) return null;
+  const style = getComputedStyle(elem);
+  const match = style.backgroundImage.match(/url\(['"]?(.+?)['"]?\)/);
+  return match ? match[1] : null;
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    if (!src) {
+      resolve();
+      return;
+    }
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => {
+      resolve();
+    };
+    img.src = src;
+  });
+}
+
+const moveCoconut = percent => {
+  if (!bar || !coconut) return;
+  const barWidth = bar.offsetWidth;
+  const coconutWidth = coconut.offsetWidth;
+  const maxLeft = barWidth - coconutWidth;
+  const newLeft = (percent / 100) * maxLeft + 75;
+  coconut.style.left = `${newLeft}px`;
+};
+
+async function preloadAllImages() {
+  const cssBackgrounds = [
+    getBackgroundImageUrl(loader),
+    getBackgroundImageUrl(loaderLogo),
+    getBackgroundImageUrl(loaderProgress),
+  ].filter(Boolean);
+
+  const htmlImages = [bar.src, coconut.src].filter(
+    src => (src && src.startsWith('http')) || src.startsWith('./')
+  );
+
+  const allResources = [
+    ...cssBackgrounds,
+    ...htmlImages,
+    './assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png',
+    './assets/button1.png',
+    './assets/buttondis1.png',
+    './assets/dis1.png',
+    './assets/done1.png',
+    './assets/fisher21.png',
+    './assets/slots22.png',
+    './assets/table21.png',
+    './assets/table41.png',
+    './assets/table5.png',
+    './assets/d-1774049281-game-logo-900x9001.png',
+    ...symbol.map(s => `./assets/symbols/${s}`),
+  ].filter(Boolean);
+
+  let loadedCount = 0;
+  const totalCount = allResources.length;
+
+  const loadingPromises = allResources.map(src =>
+    loadImage(src).then(() => {
+      loadedCount++;
+      const percent = Math.round((loadedCount / totalCount) * 100);
+      moveCoconut(percent);
+    })
+  );
+
+  await Promise.all(loadingPromises);
+
+  symbol.forEach(sym => {
+    const box = createBox(sym);
+    prebuiltSymbols[sym] = box;
+  });
+}
+
+function initStart() {
+  const initialSymbols = spinQueue[0];
+
+  reels.forEach((reel, index) => {
+    const boxes = reel.querySelector('.boxes');
+    boxes.innerHTML = '';
+
+    initialSymbols[index].forEach(sym => {
+      const box = createBox(sym);
+      box.dataset.symbol = sym;
+      boxes.appendChild(box);
+    });
+
+    boxes.style.transition = 'none';
+    boxes.style.transform = 'translateY(0)';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  loader.style.display = 'flex';
+  main.style.display = 'none';
+  document.getElementById('spin-btn').classList.add('blocked');
+
+  preloadAllImages().then(() => {
+    setTimeout(() => {
+      loader.classList.add('hidden');
+
+      main.classList.add('hidden');
+      setTimeout(() => {
+        loader.style.display = 'none';
+        main.style.display = 'flex';
+        main.classList.remove('hidden');
+      }, 50);
+      setTimeout(() => {
+        startPopup.style.display = 'flex';
+        startPopup.setAttribute('data-open', 'true');
+        overlay.setAttribute('data-visible', 'true');
+      }, 1000);
+      initStart();
+      activateBtn.classList.add('animate');
+    }, 1000);
+
+    activateBtn.addEventListener('click', () => {
+      startPopup.setAttribute('data-open', 'false');
+      setTimeout(() => {
+        startPopup.style.display = 'none';
+      }, 300);
+      overlay.setAttribute('data-visible', 'false');
+      spinBtn.classList.remove('blocked');
+      activateBtn.classList.remove('animate');
+    });
+  });
+});
 
 function createBox(sym) {
   if (prebuiltSymbols[sym]) {
