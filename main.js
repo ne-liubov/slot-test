@@ -1,16 +1,18 @@
-const spinBtn = document.getElementById('spin-btn');
-const loader = document.getElementById('loader');
 const main = document.querySelector('main');
-const overlay = document.getElementById('overlay');
-const startPopup = document.querySelector('[data-start-popup]');
-const activateBtn = document.getElementById('activate-btn');
-const installBtn = document.getElementById('install-btn');
+const loader = document.getElementById('loader');
 const loaderLogo = document.getElementById('loader-logo');
 const loaderProgress = document.getElementById('loader-progress');
 const bar = document.getElementById('loader-bar');
 const coconut = document.getElementById('loader-coconut');
-const reels = document.querySelectorAll('.reel');
+const overlay = document.getElementById('overlay');
+const startPopup = document.querySelector('[data-start-popup]');
+const activateBtn = document.getElementById('activate-btn');
 const counterEl = document.getElementById('counter');
+const spinBtn = document.getElementById('spin-btn');
+const reels = document.querySelectorAll('.reel');
+const finalPopup = document.querySelector('[data-final-popup]');
+const installBtn = document.getElementById('install-btn');
+const countdownEl = document.getElementById('countdown');
 
 const prebuiltSymbols = {};
 
@@ -199,9 +201,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   preloadAllImages().then(() => {
     setTimeout(() => {
-      loader.style.display = 'none';
+      loader.classList.add('hidden');
       main.style.display = 'flex';
+      main.classList.add('hidden');
       setTimeout(() => {
+        loader.style.display = 'none';
+        main.classList.remove('hidden');
+      }, 50);
+      setTimeout(() => {
+        startPopup.style.display = 'flex';
         startPopup.setAttribute('data-open', 'true');
         overlay.setAttribute('data-visible', 'true');
       }, 1000);
@@ -211,6 +219,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     activateBtn.addEventListener('click', () => {
       startPopup.setAttribute('data-open', 'false');
+      setTimeout(() => {
+        startPopup.style.display = 'none';
+      }, 300);
       overlay.setAttribute('data-visible', 'false');
       spinBtn.classList.remove('blocked');
       activateBtn.classList.remove('animate');
@@ -223,17 +234,14 @@ function delay(ms) {
 }
 
 async function spin() {
+  spinBtn.classList.add('disabled');
+
   if (spinning || spinsLeft <= 0) return;
   spinning = true;
   spinsLeft--;
   counterEl.textContent = spinsLeft;
 
   const isLastSpin = spinsLeft === 0;
-  if (isLastSpin) {
-    spinBtn.classList.add('disabled');
-    spinBtn.style.cursor = 'not-allowed';
-  }
-
   const delayBetweenReels = 300;
   const spinPromises = [];
   const spinIndex = 3 - (spinsLeft + 1);
@@ -246,7 +254,7 @@ async function spin() {
 
     const final3 = currentSpinResults[i];
 
-    const prefill = getRandomSymbols(5, isLastSpin ? [luckySymbol] : []);
+    const prefill = getRandomSymbols(15, isLastSpin ? [luckySymbol] : []);
     const spinSequence = final3.concat(prefill);
     boxes.style.transition = 'none';
 
@@ -294,10 +302,13 @@ async function spin() {
 
   if (isLastSpin) {
     highlightLuckySymbols();
-    setTimeout(showFinalPopup, 3000);
+    setTimeout(showFinalPopup, 1000);
   }
 
   spinning = false;
+  if (!isLastSpin) {
+    spinBtn.classList.remove('disabled');
+  }
 }
 
 function createBox(sym) {
@@ -344,19 +355,7 @@ function getRandomSymbols(count, exclude = []) {
   return res;
 }
 
-function getNonWinningCombo() {
-  const combo = [];
-  while (combo.length < 3) {
-    const s = getRandomSymbol(combo);
-    combo.push(s);
-  }
-  return combo;
-}
-
 function showFinalPopup() {
-  const finalPopup = document.querySelector('[data-final-popup]');
-  const countdownEl = document.getElementById('countdown');
-
   finalPopup.setAttribute('data-open', 'true');
   overlay.setAttribute('data-visible', 'true');
   installBtn.classList.add('animate');

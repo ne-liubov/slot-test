@@ -33,6 +33,17 @@ main {
   background: url('./assets/79f74d1510eb07da2ce48e6f9a8960f9033afb1f.png')
     no-repeat center center / cover;
 }
+
+#loader,
+main {
+  transition: opacity 0.5s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 img {
   display: block;
 }
@@ -122,6 +133,20 @@ p {
   z-index: 9;
   margin-top: 16px;
   margin-left: 12px;
+  animation: sway 7s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-3deg);
+  }
 }
 
 #game-fisher {
@@ -232,7 +257,7 @@ p {
   cursor: pointer;
   padding: 0;
   overflow: hidden;
-  animation: pulseScale 1s infinite ease-in-out;
+  animation: pulseScale 2s infinite ease-in-out;
 }
 
 #spin-btn::after {
@@ -250,22 +275,11 @@ p {
   left: 50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, #360443 0%, transparent 70%);
   transform: translate(-50%, -50%) scale(0.8);
-  animation: pulseCenter 1s infinite ease-in-out;
+  animation: pulseCenter 2s infinite ease-in-out;
   pointer-events: none;
 }
 
-@keyframes pulseCenter {
-  0% {
-    transform: translate(-50%, -50%) scale(0.4);
-    opacity: 0.1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(0.8);
-    opacity: 0.2;
-  }
-}
 @keyframes pulseScale {
   0% {
     transform: scale(1);
@@ -280,12 +294,7 @@ p {
 
 #install-btn.animate,
 #activate-btn.animate {
-  animation: pulseScale 1s infinite ease-in-out;
-}
-
-#activate-btn.animate::before,
-#install-btn.animate::before {
-  animation: pulseCenter 1s infinite ease-in-out;
+  animation: pulseScale 2s infinite ease-in-out;
 }
 
 #activate-btn.no-animation,
@@ -314,13 +323,11 @@ p {
   background: none !important;
 }
 
-[data-start-popup][data-open='false'],
-[data-overlay][data-visible='false'],
-[data-final-popup][data-open='false'] {
+[data-overlay][data-visible='false'] {
   display: none !important;
 }
 
-[data-start-popup][data-open='true'] {
+[data-start-popup] {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -334,6 +341,26 @@ p {
   background-size: 100%;
   top: auto;
   left: auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: none;
+}
+
+[data-start-popup][data-open='true'] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  transition: none;
+  display: flex;
+}
+
+[data-start-popup][data-open='false'] {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 #overlay {
@@ -357,18 +384,6 @@ p {
   background: url('assets/d-1774049281-game-logo-900x9001.png') no-repeat center
     top / contain;
   margin-top: -45px;
-}
-
-@keyframes sway {
-  0% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
-  100% {
-    transform: rotate(-5deg);
-  }
 }
 
 .first-pop-text {
@@ -432,12 +447,11 @@ p {
   left: auto;
   width: 150%;
   height: 150%;
-  background: radial-gradient(circle, #360443 0%, transparent 50%);
   transform: scale(0.8);
   pointer-events: none;
 }
 
-[data-final-popup][data-open='true'] {
+[data-final-popup] {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -449,9 +463,15 @@ p {
   height: 490px;
   background: url('assets/table5.png') no-repeat;
   background-size: 100%;
-  top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -150%);
+  transition: transform 0.3s ease-out;
+  opacity: 0;
+}
+
+[data-final-popup][data-open='true'] {
+  transform: translate(-50%, -7%);
+  opacity: 1;
 }
 
 .final-pop-text-done {
@@ -521,7 +541,6 @@ p {
   left: auto;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, #360443 0%, transparent 70%);
   transform: scale(0.8);
   pointer-events: none;
 }
