@@ -256,17 +256,16 @@ function initStart() {
 document.addEventListener('DOMContentLoaded', function () {
   loader.style.display = 'flex';
   main.style.display = 'none';
-  document.getElementById('spin-btn').classList.add('blocked');
+  spinBtn.classList.add('blocked');
 
   preloadAllImages().then(() => {
     setTimeout(() => {
       loader.classList.add('hidden');
-
       main.classList.add('hidden');
       setTimeout(() => {
         loader.style.display = 'none';
-        main.style.display = 'flex';
         main.classList.remove('hidden');
+        main.style.display = 'flex';
       }, 50);
       setTimeout(() => {
         startPopup.style.display = 'flex';
